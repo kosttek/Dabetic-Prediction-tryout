@@ -1,0 +1,11 @@
+<resources>
+
+    <string name="app_name">Diabetic Prediciton</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="glucose">glukoza</string>
+    <string name="insulin">insulina</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_main">Graph</string>
+    <string name="title_activity_fill_data">Fill Data</string>
+
+</resources>

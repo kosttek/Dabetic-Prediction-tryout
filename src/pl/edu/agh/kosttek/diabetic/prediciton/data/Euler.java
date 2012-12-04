@@ -5,82 +5,89 @@ import java.util.List;
 
 public class Euler {
 	private long startTime;
-	private double total_time = 60*4;
-	private int N = 300;
-	
+	private double total_time = 60 * 4;
+	private int N = 900;
+
 	private List<Double> time = new ArrayList<Double>();
 	private List<Double> value = new ArrayList<Double>();
-	
-	private double p1,p2,p3,n,V1;
-	private double gB,iB;
-	
-	public void initVariables(){
+
+	private double p1, p2, p3, n, V1;
+	private double gB, iB;
+	private int startGlucose;
+
+	public Euler() {
+		initVariables();
+	}
+
+	public void initVariables() {
 		gB = 4.5;
 		iB = 4.5;
 		V1 = 12;
 		p1 = 0;
 		p2 = 0.025;
 		p3 = 0.0000013;
-		n = 5/54;
+		n = 5 / 54;
+		setStartGlucose(0);
 	}
-	
-	public void compute(double insulin,double glucose){
-		setStartTime(System.currentTimeMillis());
-		
-		double[] G = new double[N+1];
-		double[] X = new double[N+1];
-		double[] I = new double[N+1];
 
-		G[0] = 80;
+	public void compute(double insulin, double glucose) {
+		setStartTime(System.currentTimeMillis());
+
+		double[] G = new double[N + 1];
+		double[] X = new double[N + 1];
+		double[] I = new double[N + 1];
+
+		G[0] = getStartGlucose();
 		X[0] = 0;
 		I[0] = 0;
 
 		double dt = total_time / N;
-		initVariables();
-		
-		for (int i = 0; i < N; ++i)
-		{
-		   double t = i*dt;
-		   double u = computeU(t, insulin);
-		   double gMeal = computeG(t,glucose);
 
-		   /* calculate derivatives */
-		   double dSdt = - p1 * G[i] - X[i]*(G[i] - gB) + gMeal/V1;
-		   double dIdt = - p2 * X[i] + p3*I[i];
-		   double dRdt = - n  * (I[i]+ iB) + u/V1;
+		for (int i = 0; i < N; ++i) {
+			double t = i * dt;
+			double u = computeU(t, insulin);
+			double gMeal = computeG(t, glucose);
 
-		   /* now integrate using Euler */
-		   G[i+1] = G[i] + dSdt * dt;
-		   X[i+1] = X[i] + dIdt * dt;
-		   I[i+1] = I[i] + dRdt * dt;
-		   
-		   getTime().add(t);
-		   getValue().add(G[i+1]);
+			/* calculate derivatives */
+			double dSdt = -p1 * G[i] - X[i] * (G[i] - gB) + gMeal / V1;
+			double dIdt = -p2 * X[i] + p3 * I[i];
+			double dRdt = -n * (I[i] + iB) + u / V1;
+
+			/* now integrate using Euler */
+			G[i + 1] = G[i] + dSdt * dt;
+			X[i + 1] = X[i] + dIdt * dt;
+			I[i + 1] = I[i] + dRdt * dt;
+
+			getTime().add(t * 60 + startTime / 1000);// t is one minute so multi
+														// 60 to be secounds +
+														// start time
+			getValue().add(G[i + 1]);
 		}
 	}
-	private double computeU(double t,double insulin){
+
+	private double computeU(double t, double insulin) {
 
 		return MockInsulinFunction.computeU(t, insulin);
 	}
-	
-	private double computeG(double t, double glucose){
+
+	private double computeG(double t, double glucose) {
 		double A = glucose;
-		double result =  A * Math.exp(-0.05*t);
+		double result = A * Math.exp(-0.05 * t);
 		return result;
 	}
-	
-	public double [] getTimeArray(){
-		double [] result = new double[N];
-		for(int i = 0 ; i< getTime().size(); i++){
-			result[i] = getTime().get(i); 
+
+	public double[] getTimeArray() {
+		double[] result = new double[N];
+		for (int i = 0; i < getTime().size(); i++) {
+			result[i] = getTime().get(i);
 		}
 		return result;
 	}
-	
-	public double [] getValueArray(){
-		double [] result = new double[N];
-		for(int i = 0 ; i< getValue().size(); i++){
-			result[i] = getValue().get(i); 
+
+	public double[] getValueArray() {
+		double[] result = new double[N];
+		for (int i = 0; i < getValue().size(); i++) {
+			result[i] = getValue().get(i);
 		}
 		return result;
 	}
@@ -107,6 +114,14 @@ public class Euler {
 
 	public void setStartTime(long startTime) {
 		this.startTime = startTime;
+	}
+
+	public int getStartGlucose() {
+		return startGlucose;
+	}
+
+	public void setStartGlucose(int startGlucose) {
+		this.startGlucose = startGlucose;
 	}
 
 }

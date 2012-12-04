@@ -57,13 +57,17 @@ public class FillDataActivity extends SherlockActivity {
     protected void computeAction(){
     	EditText glucoseEdit = (EditText)findViewById(R.id.glucose_edit);
     	EditText insulinEdit = (EditText)findViewById(R.id.insulin_edit);
+    	EditText startGlucoseEdit = (EditText)findViewById(R.id.start_glucose_edit);
     	double insulin = new Double(insulinEdit.getText().toString());
     	double glucose = new Double(glucoseEdit.getText().toString());
+    	double startGlucose = new Double(startGlucoseEdit.getText().toString());
     	
     	Euler euler = new Euler();
+    	euler.setStartGlucose((int)startGlucose);
     	euler.compute(insulin, glucose);
     	
     	GraphViewSeries series = ConvertEulerOnSeries.convert(euler);
-    	GlucoseApplication.setGraphViewSeries(series);
+    	GlucoseApplication.getPredictionSeries().setGraphViewSeries(series);
+    	GlucoseApplication.setMeasureSeries(null);
     }
 }

@@ -27,6 +27,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="pl.edu.agh.kosttek.diabetic.prediciton.ui.GraphActivity" />
         </activity>
+                <activity
+            android:name=".ui.MeasureDataActivity"
+            android:label="@string/title_activity_fill_data" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="pl.edu.agh.kosttek.diabetic.prediciton.ui.GraphActivity" />
+        </activity>
     </application>
 
 </manifest>
